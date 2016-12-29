@@ -1,0 +1,12 @@
+app/build/*
+.gradle/
+.idea/
+app/build/
+app/app.iml
+build/
+*.iml
+*.bin
+*.lock
+local.properties
+gradlew
+gradlew.bat

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+        <ImageView
+            android:layout_width="@dimen/bar_height"
+            android:layout_height="@dimen/bar_height"
+            android:background="@drawable/bg_button"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_copy"
+            android:tag="1"/>
+
+        <ImageView
+            android:layout_width="@dimen/bar_height"
+            android:layout_height="@dimen/bar_height"
+            android:background="@drawable/bg_button"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_cut"
+            android:tag="2"/>
+
+        <ImageView
+            android:layout_width="@dimen/bar_height"
+            android:layout_height="@dimen/bar_height"
+            android:scaleType="center"
+            android:background="@drawable/bg_button"
+            android:clickable="true"
+            android:src="@drawable/ic_delete"
+            android:tag="3"/>
+        <ImageView
+            android:layout_width="@dimen/bar_height"
+            android:layout_height="@dimen/bar_height"
+            android:scaleType="center"
+            android:background="@drawable/bg_button"
+            android:clickable="true"
+            android:src="@drawable/ic_more"
+            android:tag="4"/>
+
+</merge>
+
