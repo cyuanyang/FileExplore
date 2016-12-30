@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,8 +22,10 @@ public class BarLayout extends RelativeLayout implements View.OnClickListener {
         void cutAction();
         void moreAction();
         void deleteAction();
+        void menuAction();
     }
 
+    private ImageView mMenuView;
     private TextView titleView;
     private OperationLayout operationLayout;//操作布局
 
@@ -45,24 +48,28 @@ public class BarLayout extends RelativeLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        try {
-            int tag = v.getTag()==null ? 0 : Integer.parseInt(v.getTag().toString());
-            switch (tag){
-                case 1: ///复制
-                    if (menuListener!=null)menuListener.copyAction();
-                    break;
-                case 2: //cut
-                    if (menuListener!=null)menuListener.cutAction();
-                    break;
-                case 3:
-                    if (menuListener!=null)menuListener.deleteAction();
-                    break;
-                case 4: //del
-                    if (menuListener!=null)menuListener.moreAction();
-                    break;
+        if (v.getId() == R.id.expanded_menu){
+            if (menuListener!=null)menuListener.menuAction();
+        }else {
+            try {
+                int tag = v.getTag()==null ? 0 : Integer.parseInt(v.getTag().toString());
+                switch (tag){
+                    case 1: ///复制
+                        if (menuListener!=null)menuListener.copyAction();
+                        break;
+                    case 2: //cut
+                        if (menuListener!=null)menuListener.cutAction();
+                        break;
+                    case 3:
+                        if (menuListener!=null)menuListener.deleteAction();
+                        break;
+                    case 4: //del
+                        if (menuListener!=null)menuListener.moreAction();
+                        break;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        }catch (Exception e){
-            e.printStackTrace();
         }
 
     }
@@ -70,11 +77,15 @@ public class BarLayout extends RelativeLayout implements View.OnClickListener {
     private void initView(){
         LayoutInflater.from(this.getContext()).inflate(R.layout.layout_bar , this);
         operationLayout = (OperationLayout) findViewById(R.id.operationLayout);
+        titleView = (TextView) findViewById(R.id.bar_title);
+        mMenuView = (ImageView) findViewById(R.id.expanded_menu);
         operationLayout.setVisibility(GONE);
 
         for (int i = 0 ; i< operationLayout.getChildCount() ; i++){
             operationLayout.getChildAt(i).setOnClickListener(this);
         }
+
+        mMenuView.setOnClickListener(this);
     }
 
     public void setMenuListenert(MenuListener l){
@@ -90,7 +101,6 @@ public class BarLayout extends RelativeLayout implements View.OnClickListener {
     }
 
     public void setText(String title){
-        titleView = (TextView) findViewById(R.id.bar_title);
         titleView.setText(title);
     }
 

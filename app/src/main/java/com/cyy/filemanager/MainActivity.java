@@ -3,11 +3,13 @@ package com.cyy.filemanager;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 
 import com.cyy.filemanager.file.Copy;
@@ -27,13 +29,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         MyAdapter.OnItemClickListener, MyAdapter.OnItemLongClickListener, BarLayout.MenuListener
-, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener , View.OnClickListener,Copy.CopyCallback{
+        , FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, View.OnClickListener, Copy.CopyCallback {
 
     protected RecyclerView recycleView;
     protected BarLayout barLayout; //当前所在目录
     protected FloatingActionButton actionA;
     protected FloatingActionButton actionB;
     protected MyFloatingActionsMenu multipleActions;
+    protected DrawerLayout drawerLayout;
 
     private MyAdapter adapter;
     private List<FileModel> datas = new ArrayList<>(10);
@@ -78,10 +81,29 @@ public class MainActivity extends AppCompatActivity implements
         actionA = (FloatingActionButton) findViewById(R.id.action_a);
         actionB = (FloatingActionButton) findViewById(R.id.action_b);
         multipleActions = (MyFloatingActionsMenu) findViewById(R.id.multiple_actions);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         multipleActions.setVisibility(View.GONE);
         multipleActions.setOnFloatingActionsMenuUpdateListener(this);
 
         actionA.setOnClickListener(this);
+
+//        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
+//                this,
+//                drawerLayout,
+//                R.drawable.ic_copy,
+//                0,
+//                0
+//        ) {
+//            public void onDrawerClosed(View view) {
+//
+//            }
+//
+//            public void onDrawerOpened(View drawerView) {
+////                getActionBar().setTitle(mDrawerTitle);
+////                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+//            }
+//        };
+//        drawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     @Override
@@ -100,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recycleView.getLayoutManager();
                 state.position = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
                 fileManager.saveState(state);
-                Log.e("push =" , "push" +state.position);
+                Log.e("push =", "push" + state.position);
                 refreshFileByDir(fileManager.pushDir(model.file));
 
             } else {
@@ -137,18 +159,23 @@ public class MainActivity extends AppCompatActivity implements
                 if (!TextUtils.isEmpty(parentDir)) {
                     refreshFileByDir(fileManager.popDir());
                     ///回到记录的位置
-                    DirectorInfo.State state  = fileManager.getCurrentState();
+                    DirectorInfo.State state = fileManager.getCurrentState();
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recycleView.getLayoutManager();
-                    linearLayoutManager.scrollToPositionWithOffset(state.position , 0);
-                    Log.e("onBackPressed " , "po="+state.position);
+                    linearLayoutManager.scrollToPositionWithOffset(state.position, 0);
+                    Log.e("onBackPressed ", "po=" + state.position);
                 }
             }
         }
     }
 
     @Override
+    public void menuAction() {
+        drawerLayout.openDrawer(Gravity.LEFT);
+    }
+
+    @Override
     public void copyAction() {
-        fileManager.initCopy(datas , this , true);
+        fileManager.initCopy(datas, this, true);
 
         multipleActions.setVisibility(View.VISIBLE);
         multipleActions.expand();
@@ -161,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void cutAction() {
-        fileManager.initCopy(datas , this , false);
+        fileManager.initCopy(datas, this, false);
 
         multipleActions.setVisibility(View.VISIBLE);
         multipleActions.expand();
@@ -202,33 +229,33 @@ public class MainActivity extends AppCompatActivity implements
             public void run() {
                 multipleActions.dissmiss();
             }
-        },300);
+        }, 300);
         fileManager.cancleCopy();
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.action_a){
+        if (v.getId() == R.id.action_a) {
             ///粘贴在此
             fileManager.paste(fileManager.getCurrentDirFile());
         }
     }
 
     @Override
-    public void duplicate(final Copy copy ,final File desDir ,final FileModel sourceFile) {
+    public void duplicate(final Copy copy, final File desDir, final FileModel sourceFile) {
         ///文件复制重复
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示").setMessage("目录下已经存在相同的文件，请选择").setLeftBtn("保留两者").setRightBtn("覆盖");
         builder.setLeftClickListener(new AlertDialog.OnLeftClickListener() {
             @Override
             public void onLeftClick(Dialog dialog, View v) {
-                copy.keepSameDesDir(desDir , sourceFile);
+                copy.keepSameDesDir(desDir, sourceFile);
             }
         });
         builder.setRightClickListener(new AlertDialog.OnRightClickListener() {
             @Override
             public void onRightClick(Dialog dialog, View v) {
-                copy.coverCopy(desDir , sourceFile);
+                copy.coverCopy(desDir, sourceFile);
             }
         });
         builder.build().show();
@@ -245,11 +272,11 @@ public class MainActivity extends AppCompatActivity implements
             public void run() {
                 multipleActions.dissmiss();
             }
-        },300);
+        }, 300);
     }
 
     @Override
-    public void dirPasteError(final Copy copy , final File desDir) {
+    public void dirPasteError(final Copy copy, final File desDir) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示").setMessage("文件夹不能复制到它的子文件夹，是否继续其他复制？").setLeftBtn("继续").setRightBtn("停止");
         builder.setLeftClickListener(new AlertDialog.OnLeftClickListener() {

@@ -33,5 +33,10 @@ public class OperationImpl implements BarLayout.MenuListener {
 
     }
 
+    @Override
+    public void menuAction() {
+
+    }
+
 
 }
