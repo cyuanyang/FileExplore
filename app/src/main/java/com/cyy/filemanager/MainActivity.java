@@ -1,8 +1,12 @@
 package com.cyy.filemanager;
 
 import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.cyy.filemanager.file.Copy;
 import com.cyy.filemanager.file.Delete;
@@ -31,28 +36,57 @@ public class MainActivity extends AppCompatActivity implements
         MyAdapter.OnItemClickListener, MyAdapter.OnItemLongClickListener, BarLayout.MenuListener
         , FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, View.OnClickListener, Copy.CopyCallback {
 
+    private final static int requestFilePremissionCode = 100;
     protected RecyclerView recycleView;
     protected BarLayout barLayout; //当前所在目录
     protected FloatingActionButton actionA;
     protected FloatingActionButton actionB;
     protected MyFloatingActionsMenu multipleActions;
     protected DrawerLayout drawerLayout;
+    protected TextView requestPermission;
 
     private MyAdapter adapter;
     private List<FileModel> datas = new ArrayList<>(10);
 
     private FileManager fileManager;
-    private boolean isOperate = false;
+    private boolean isOperate = false;///处于进入操作的状态
+    private boolean isPaste = false; //处于复制后等待粘贴的状态
 
-//    private DirectorInfo.State state = new DirectorInfo.State();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == requestFilePremissionCode) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                requestPermission.setVisibility(View.GONE);
+                recycleView.setVisibility(View.VISIBLE);
+                refreshFileByDir(fileManager.pushDir(fileManager.getCurrentDirFile()));
+            } else {
+                recycleView.setVisibility(View.GONE);
+                requestPermission.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void requestStorePermission() {
+        if (ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE")
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(this, new String[]{"android.permission.READ_EXTERNAL_STORAGE"},
+                    requestFilePremissionCode);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_main);
-        initView();
-//        MusicService musicService = new MusicService();
+        requestStorePermission();
+        init();
+    }
 
+
+    private void init() {
+        initView();
         fileManager = new FileManager(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycleView.setLayoutManager(linearLayoutManager);
@@ -84,26 +118,12 @@ public class MainActivity extends AppCompatActivity implements
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         multipleActions.setVisibility(View.GONE);
         multipleActions.setOnFloatingActionsMenuUpdateListener(this);
+        requestPermission = (TextView) findViewById(R.id.requestPermission);
+        requestPermission.setOnClickListener(MainActivity.this);
+        requestPermission.setVisibility(View.GONE);
 
         actionA.setOnClickListener(this);
 
-//        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
-//                this,
-//                drawerLayout,
-//                R.drawable.ic_copy,
-//                0,
-//                0
-//        ) {
-//            public void onDrawerClosed(View view) {
-//
-//            }
-//
-//            public void onDrawerOpened(View drawerView) {
-////                getActionBar().setTitle(mDrawerTitle);
-////                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-//            }
-//        };
-//        drawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     @Override
@@ -151,6 +171,18 @@ public class MainActivity extends AppCompatActivity implements
             multipleActions.dissmiss();
             restoreUI();
             fileManager.cancleCopy();
+        }else if (isPaste){
+            ///处于等待粘贴的状态
+            fileManager.cancleCopy();
+            ///去掉 flating btn
+            multipleActions.collapse();
+            multipleActions.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    multipleActions.dissmiss();
+                }
+            }, 300);
+            isPaste = false;
         } else {
             if (TextUtils.equals(fileManager.getCurrentDirFile().getAbsolutePath(), FileManager.ROOT_DIR.getAbsolutePath())) {
                 super.onBackPressed();
@@ -176,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void copyAction() {
         fileManager.initCopy(datas, this, true);
-
+        isPaste = true;
         multipleActions.setVisibility(View.VISIBLE);
         multipleActions.expand();
 
@@ -189,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void cutAction() {
         fileManager.initCopy(datas, this, false);
-
+        isPaste = true;
         multipleActions.setVisibility(View.VISIBLE);
         multipleActions.expand();
 
@@ -238,6 +270,8 @@ public class MainActivity extends AppCompatActivity implements
         if (v.getId() == R.id.action_a) {
             ///粘贴在此
             fileManager.paste(fileManager.getCurrentDirFile());
+        } else if (v.getId() == R.id.requestPermission) {
+            requestStorePermission();
         }
     }
 
@@ -266,6 +300,7 @@ public class MainActivity extends AppCompatActivity implements
         ///文件复制OK  刷新一下UI
         refreshFileByDir(fileManager.refreshCurrentDirectoryInfo());
 
+        multipleActions.toggle();
         ///去掉 flating btn
         multipleActions.postDelayed(new Runnable() {
             @Override

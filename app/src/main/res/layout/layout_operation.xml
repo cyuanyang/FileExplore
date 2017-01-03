@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    >
-        <ImageView
-            android:layout_width="@dimen/bar_height"
-            android:layout_height="@dimen/bar_height"
-            android:background="@drawable/bg_button"
-            android:clickable="true"
-            android:scaleType="center"
-            android:src="@drawable/ic_copy"
-            android:tag="1"/>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <ImageView
-            android:layout_width="@dimen/bar_height"
-            android:layout_height="@dimen/bar_height"
-            android:background="@drawable/bg_button"
-            android:clickable="true"
-            android:scaleType="center"
-            android:src="@drawable/ic_cut"
-            android:tag="2"/>
+    <ImageView
+        android:tag="1"
+        android:layout_width="@dimen/bar_height"
+        android:layout_height="@dimen/bar_height"
+        android:background="@drawable/bg_button"
+        android:clickable="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_copy" />
 
-        <ImageView
-            android:layout_width="@dimen/bar_height"
-            android:layout_height="@dimen/bar_height"
-            android:scaleType="center"
-            android:background="@drawable/bg_button"
-            android:clickable="true"
-            android:src="@drawable/ic_delete"
-            android:tag="3"/>
-        <ImageView
-            android:layout_width="@dimen/bar_height"
-            android:layout_height="@dimen/bar_height"
-            android:scaleType="center"
-            android:background="@drawable/bg_button"
-            android:clickable="true"
-            android:src="@drawable/ic_more"
-            android:tag="4"/>
+    <ImageView
+        android:tag="2"
+        android:layout_width="@dimen/bar_height"
+        android:layout_height="@dimen/bar_height"
+        android:background="@drawable/bg_button"
+        android:clickable="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_cut" />
+
+    <ImageView
+        android:tag="3"
+        android:layout_width="@dimen/bar_height"
+        android:layout_height="@dimen/bar_height"
+        android:background="@drawable/bg_button"
+        android:clickable="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_delete" />
+
+    <ImageView
+        android:tag="4"
+        android:visibility="gone"
+        android:layout_width="@dimen/bar_height"
+        android:layout_height="@dimen/bar_height"
+        android:background="@drawable/bg_button"
+        android:clickable="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_more" />
 
 </merge>
-

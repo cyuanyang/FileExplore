@@ -12,30 +12,29 @@
         android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/mainColor"
+        android:layout_marginTop="30dp"
         android:textSize="17sp"
-        android:layout_marginTop="30dp" />
+        android:textColor="@color/mainColor" />
 
     <TextView
         android:id="@+id/dialog_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/mainColor"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:textSize="14sp"
         android:lineSpacingExtra="5dp"
-        />
+        android:textColor="@color/mainColor" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:layout_marginTop="20dp"
         android:layout_gravity="right"
         android:layout_marginRight="5dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="right">
 
         <Button
             android:id="@+id/btn_left"
@@ -43,16 +42,16 @@
             android:layout_height="30dp"
             android:background="@drawable/bg_button_light"
             android:textColor="@color/mainColor"
-            android:text="保留"/>
+            android:text="保留" />
 
         <Button
             android:id="@+id/btn_right"
             android:layout_width="70dp"
             android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
             android:background="@drawable/bg_button_light"
             android:textColor="@color/mainColor"
-            android:layout_marginLeft="1dp"
-            android:text="替换"/>
+            android:text="替换" />
 
     </LinearLayout>
 

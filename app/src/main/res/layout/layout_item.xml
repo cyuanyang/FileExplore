@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:clickable="true"
-    android:background="@drawable/bg_item">
+    android:background="@drawable/bg_item"
+    android:clickable="true">
 
     <RelativeLayout
         android:id="@+id/bgView"
@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
+
         <ImageView
             android:id="@+id/icon"
             android:layout_width="50dp"
@@ -26,10 +27,11 @@
             android:layout_toRightOf="@+id/icon"
             android:layout_alignTop="@+id/icon"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="3dp"
             android:textSize="16sp"
-            android:textColor="@color/black"
-            android:text="1111" />
+            android:singleLine="true"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/fileInfo"
@@ -39,8 +41,7 @@
             android:layout_alignBottom="@+id/icon"
             android:layout_marginBottom="3dp"
             android:layout_alignLeft="@+id/name"
-            android:textSize="13sp"
-            android:text="11111" />
+            android:textSize="13sp"/>
 
     </RelativeLayout>
 
