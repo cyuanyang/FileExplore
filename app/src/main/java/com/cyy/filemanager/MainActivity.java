@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements
             restoreUI();
             fileManager.cancleCopy();
         } else {
-            if (TextUtils.equals(fileManager.getCurrentDirFile().getAbsolutePath(), "/")) {
+            if (TextUtils.equals(fileManager.getCurrentDirFile().getAbsolutePath(), FileManager.ROOT_DIR.getAbsolutePath())) {
                 super.onBackPressed();
             } else {
                 String parentDir = fileManager.getCurrentDirFile().getParent();

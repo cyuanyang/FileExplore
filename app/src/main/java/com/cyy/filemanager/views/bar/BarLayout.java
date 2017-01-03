@@ -2,9 +2,13 @@ package com.cyy.filemanager.views.bar;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -65,6 +69,7 @@ public class BarLayout extends RelativeLayout implements View.OnClickListener {
                         break;
                     case 4: //del
                         if (menuListener!=null)menuListener.moreAction();
+                        showMoreAction( v);
                         break;
                 }
             }catch (Exception e){
@@ -72,6 +77,18 @@ public class BarLayout extends RelativeLayout implements View.OnClickListener {
             }
         }
 
+    }
+
+    private void showMoreAction(View v){
+        PopupWindow popupWindow = new PopupWindow(this.getContext());
+        popupWindow.setFocusable(true); // 设置PopupWindow可获得焦点
+        popupWindow.setTouchable(true); // 设置PopupWindow可触摸
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_more));
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setContentView(LayoutInflater.from(this.getContext()).inflate(R.layout.layout_more , null));
+        popupWindow.showAsDropDown(v);
     }
 
     private void initView(){

@@ -19,6 +19,8 @@ import java.util.List;
 
 public class FileManager {
 
+    public static final File ROOT_DIR = Environment.getExternalStorageDirectory();
+
     private Context context;
 
     private File currentDir; ///当前所在目录
@@ -30,7 +32,7 @@ public class FileManager {
 
     public FileManager(Context c){
         this.context = c;
-        currentDir = Environment.getRootDirectory().getParentFile();
+        currentDir = ROOT_DIR;
     }
 
     ///刷新当前文件夹信息

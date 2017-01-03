@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.cyy.filemanager.file.FileModel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,12 +51,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
             holder.iconView .setImageResource(R.drawable.ic_know);
         }
 
+        //date
+        Date date = new Date( fileModel.file.lastModified());
+        SimpleDateFormat myFmt=new SimpleDateFormat("yyyy年MM月dd日");
+        String lastModify = myFmt.format(date);
         ///可读可写可执行权限
         String permission = "";
         permission += fileModel.file.canRead() ? "r" :"-";
         permission += fileModel.file.canWrite() ? "w" :"-";
         permission += fileModel.file.canExecute() ? "x" :"-";
-        holder.fileInfoView.setText(permission);
+        holder.fileInfoView.setText(permission + "  "+ lastModify);
 
         ////选择的背景变化
         if (fileModel.select){
