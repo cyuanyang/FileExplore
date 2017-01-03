@@ -24,7 +24,8 @@ import com.cyy.filemanager.file.FileModel;
 import com.cyy.filemanager.file.dir.DirectorInfo;
 import com.cyy.filemanager.views.MyFloatingActionsMenu;
 import com.cyy.filemanager.views.bar.BarLayout;
-import com.cyy.filemanager.views.dialog.dialog.AlertDialog;
+import com.cyy.filemanager.views.dialog.AlertDialog;
+import com.cyy.filemanager.views.menu.MenuLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -34,7 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         MyAdapter.OnItemClickListener, MyAdapter.OnItemLongClickListener, BarLayout.MenuListener
-        , FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, View.OnClickListener, Copy.CopyCallback {
+        , FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, View.OnClickListener, Copy.CopyCallback,MenuLayout.OnMenuCallback {
 
     private final static int requestFilePremissionCode = 100;
     protected RecyclerView recycleView;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements
     protected MyFloatingActionsMenu multipleActions;
     protected DrawerLayout drawerLayout;
     protected TextView requestPermission;
+    protected MenuLayout menuLayout;
 
     private MyAdapter adapter;
     private List<FileModel> datas = new ArrayList<>(10);
@@ -84,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements
         init();
     }
 
-
     private void init() {
         initView();
         fileManager = new FileManager(this);
@@ -123,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements
         requestPermission.setVisibility(View.GONE);
 
         actionA.setOnClickListener(this);
+        menuLayout = (MenuLayout) findViewById(R.id.menu_layout);
+        menuLayout.setMenuCallback(this);
 
     }
 
@@ -171,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements
             multipleActions.dissmiss();
             restoreUI();
             fileManager.cancleCopy();
-        }else if (isPaste){
+        } else if (isPaste) {
             ///处于等待粘贴的状态
             fileManager.cancleCopy();
             ///去掉 flating btn
@@ -254,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onMenuCollapsed() {
         isOperate = false;
+        isPaste = false;
         barLayout.isOperate(isOperate);
         restoreUI();
         multipleActions.postDelayed(new Runnable() {
@@ -290,6 +294,13 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onRightClick(Dialog dialog, View v) {
                 copy.coverCopy(desDir, sourceFile);
+            }
+        });
+        builder.setOnCancelClickListener(new AlertDialog.OnCancelClickListener() {
+            @Override
+            public void onCancelClick(Dialog dialog, View v) {
+                fileManager.cancleCopy();
+                complete();
             }
         });
         builder.build().show();
@@ -336,6 +347,12 @@ public class MainActivity extends AppCompatActivity implements
             fileModel.select = fileModel.select ? false : false;
         }
         adapter.notifyDataSetChanged();
+    }
+
+    /********* 菜单事件 *************/
+    @Override
+    public void onSortAction() {
+        Log.e("tag" , ">>>>.");
     }
 }
 

@@ -1,8 +1,9 @@
-package com.cyy.filemanager.views.dialog.dialog;
+package com.cyy.filemanager.views.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.util.DisplayMetrics;
@@ -33,10 +34,11 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
 
     private OnRightClickListener rightClickListener;
     protected OnLeftClickListener leftClickListener;
+    private OnCancelClickListener onCancelClickListener;
 
     private TextView titleView;
     private TextView msgView;
-    private Button rightBtn ,leftBtn;
+    private Button rightBtn ,leftBtn , cancelBtn;
 
     public interface OnRightClickListener {
         void onRightClick(Dialog dialog, View v);
@@ -45,7 +47,9 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
     public interface OnLeftClickListener {
         void onLeftClick(Dialog dialog, View v);
     }
-
+    public interface OnCancelClickListener {
+        void onCancelClick(Dialog dialog, View v);
+    }
 
     public AlertDialog(Context context, int themeResId) {
         super(context, themeResId);
@@ -58,9 +62,8 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DisplayMetrics metric = new DisplayMetrics();
-        this.getWindow().getWindowManager().getDefaultDisplay().getMetrics(metric);
-        setDialogWidth(metric.widthPixels*4/5);
+
+        setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -74,9 +77,15 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
             if (leftClickListener != null) leftClickListener.onLeftClick(this , view);
         } else if (view.getId() == R.id.btn_right) {
             if (rightClickListener != null) rightClickListener.onRightClick(this , view);
+        }else if (view.getId() == R.id.btn_cancel){
+            if (onCancelClickListener!=null) onCancelClickListener.onCancelClick(this , view);
         }
-        this.hide();
         dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
     }
 
     @Override
@@ -87,8 +96,10 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
 
         rightBtn = (Button) findViewById(R.id.btn_right);
         leftBtn = (Button) findViewById(R.id.btn_left);
+        cancelBtn = (Button) findViewById(R.id.btn_cancel);
         rightBtn.setOnClickListener(this);
         leftBtn.setOnClickListener(this);
+        cancelBtn.setOnClickListener(this);
     }
 
     public void setMyTitle(String title) {
@@ -96,14 +107,12 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
             titleView.setText(title);
     }
 
-
     public void setMyMessage(String message) {
         if (message!=null){
             msgView.setText(message);
         }
 
     }
-
 
     public void setBtnLeft(String left) {
         if (left!=null)
@@ -124,6 +133,10 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
         this.leftClickListener = leftClickListener;
     }
 
+    public void setOnCancelListener(OnCancelClickListener listener) {
+        this.onCancelClickListener = listener;
+    }
+
     /**
      * 建造者
      */
@@ -134,6 +147,7 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
         private String rightBtn;
         private OnRightClickListener rightClickListener;
         private OnLeftClickListener leftClickListener;
+        private OnCancelClickListener onCancelClickListener;
 
         private Context context;
 
@@ -171,6 +185,10 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
             return this;
         }
 
+        public Builder setOnCancelClickListener(OnCancelClickListener onCancelClickListener) {
+            this.onCancelClickListener = onCancelClickListener;
+            return this;
+        }
 
         public AlertDialog build() {
             AlertDialog dialog = new AlertDialog(context);
@@ -180,6 +198,7 @@ public class AlertDialog extends BaseDialog implements View.OnClickListener {
             dialog.setBtnRight(rightBtn);
             dialog.setRightClickListener(rightClickListener);
             dialog.setLeftClickListener(leftClickListener);
+            dialog.setOnCancelListener(onCancelClickListener);
             return dialog;
         }
     }

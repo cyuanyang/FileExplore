@@ -1,4 +1,4 @@
-package com.cyy.filemanager.views.dialog.dialog;
+package com.cyy.filemanager.views.dialog;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -27,14 +27,22 @@
         android:lineSpacingExtra="5dp"
         android:textColor="@color/mainColor" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="right">
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_button_light"
+            android:textColor="@color/mainColor"
+            android:text="取消" />
 
         <Button
             android:id="@+id/btn_left"
@@ -42,6 +50,7 @@
             android:layout_height="30dp"
             android:background="@drawable/bg_button_light"
             android:textColor="@color/mainColor"
+            android:layout_toLeftOf="@+id/btn_right"
             android:text="保留" />
 
         <Button
@@ -51,9 +60,10 @@
             android:layout_marginLeft="1dp"
             android:background="@drawable/bg_button_light"
             android:textColor="@color/mainColor"
+            android:layout_alignParentRight="true"
             android:text="替换" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

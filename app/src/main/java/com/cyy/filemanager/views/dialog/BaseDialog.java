@@ -1,8 +1,9 @@
-package com.cyy.filemanager.views.dialog.dialog;
+package com.cyy.filemanager.views.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -29,6 +30,10 @@ public abstract class BaseDialog extends Dialog{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DisplayMetrics metric = new DisplayMetrics();
+        this.getWindow().getWindowManager().getDefaultDisplay().getMetrics(metric);
+        setDialogWidth(metric.widthPixels*4/5);
     }
 
     /**
