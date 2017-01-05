@@ -26,7 +26,6 @@ public class FileManager {
     private File currentDir; ///当前所在目录
 
     private Copy copy;
-    private int sortType = SortFile.SORT_BY_NAME; ///排序的方式
 
     private DirectoryStack<DirectorInfo<FileModel>> stack = new DirectoryStack<DirectorInfo<FileModel>>(); //目录栈
 
@@ -49,7 +48,7 @@ public class FileManager {
             }
         }
 
-        this.sortFileModel(result);
+        this.sortFileModel(result , SortFile.SORT_BY_NAME);
 
         return result;
     }
@@ -80,7 +79,7 @@ public class FileManager {
             }
         }
 
-        this.sortFileModel(result );
+        this.sortFileModel(result ,SortFile.SORT_BY_NAME);
 
         stack.push(new DirectorInfo<FileModel>(currentDir.getAbsolutePath() , result));
         return result;
@@ -124,8 +123,8 @@ public class FileManager {
 
 
     ///对文件进行排序
-    public List<FileModel> sortFileModel(List<FileModel> fileModels){
-       return SortFile.sort(fileModels , this.sortType);
+    public List<FileModel> sortFileModel(List<FileModel> fileModels , int sortType){
+       return SortFile.sort(fileModels , sortType);
     }
 
     ///返回当前的所在的文件夹

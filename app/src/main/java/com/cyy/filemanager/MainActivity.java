@@ -25,6 +25,7 @@ import com.cyy.filemanager.file.dir.DirectorInfo;
 import com.cyy.filemanager.views.MyFloatingActionsMenu;
 import com.cyy.filemanager.views.bar.BarLayout;
 import com.cyy.filemanager.views.dialog.AlertDialog;
+import com.cyy.filemanager.views.dialog.ChooseDialog;
 import com.cyy.filemanager.views.menu.MenuLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -35,7 +36,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         MyAdapter.OnItemClickListener, MyAdapter.OnItemLongClickListener, BarLayout.MenuListener
-        , FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, View.OnClickListener, Copy.CopyCallback,MenuLayout.OnMenuCallback {
+        , FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, View.OnClickListener,
+        Copy.CopyCallback,MenuLayout.OnMenuCallback , ChooseDialog.Callback {
 
     private final static int requestFilePremissionCode = 100;
     protected RecyclerView recycleView;
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements
         actionA.setOnClickListener(this);
         menuLayout = (MenuLayout) findViewById(R.id.menu_layout);
         menuLayout.setMenuCallback(this);
+        menuLayout.setMenuSortCallback(this);
 
     }
 
@@ -351,9 +354,27 @@ public class MainActivity extends AppCompatActivity implements
 
     /********* 菜单事件 *************/
     @Override
-    public void onSortAction() {
-        Log.e("tag" , ">>>>.");
+    public void onMenuChangeHideFileState(boolean isShow) {
+        
     }
+
+    /********* 菜单排序事件 *************/
+    @Override
+    public void sortByName() {
+        Log.e("vv" , "ddd");
+//        fileManager.sortFileModel()
+    }
+
+    @Override
+    public void sortByTime() {
+
+    }
+
+    @Override
+    public void sortByType() {
+
+    }
+
 }
 
 

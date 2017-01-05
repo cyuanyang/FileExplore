@@ -1,5 +1,7 @@
 package com.cyy.filemanager.file;
 
+import java.text.Collator;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -28,13 +30,9 @@ public class SortFile {
                 }else if (!lhs.isDir && rhs.isDir){
                     return 10;
                 }
-                return 0;
+                return lhs.file.getName().compareTo(rhs.file.getName());
             }
         });
-
-
-
-
         return null;
     }
 }

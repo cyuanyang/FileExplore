@@ -1,7 +1,10 @@
 package com.cyy.filemanager.views.dialog;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.cyy.filemanager.R;
 
@@ -10,7 +13,7 @@ import com.cyy.filemanager.R;
  * 选择对话框
  */
 
-public class ChooseDialog extends BaseDialog {
+public class ChooseDialog extends BaseDialog implements View.OnClickListener{
 
     private final static int TYPE_MULTIPLE_CHOOSE = 1 ; //多选
     private final static int TYPE_ONE_CHOOSE = 0 ; //单选
@@ -37,5 +40,41 @@ public class ChooseDialog extends BaseDialog {
     protected void initView() {
         super.initView();
 
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        for (int i = 0 ; i < mainLayout.getChildCount() ; i++ ) {
+            View v = mainLayout.getChildAt(i);
+            if (v instanceof RelativeLayout){
+                v.setOnClickListener(this);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (Integer.parseInt((String) v.getTag())){
+            case 100:
+                if (mCallback!=null)mCallback.sortByName();
+                break;
+
+            case 101:
+                if (mCallback!=null)mCallback.sortByTime();
+                break;
+
+            case 102:
+                if (mCallback!=null)mCallback.sortByType();
+                break;
+        }
+        dismiss();
+    }
+
+    private Callback mCallback;
+    public void setmCallback(Callback mCallback) {
+        this.mCallback = mCallback;
+    }
+
+    public interface Callback{
+        void sortByName();
+        void sortByTime();
+        void sortByType();
     }
 }
