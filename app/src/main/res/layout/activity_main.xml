@@ -75,37 +75,12 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <com.cyy.filemanager.views.menu.MenuLayout
+        android:id="@+id/menu_layout"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:orientation="vertical"
-        android:background="@color/mainColor"
-        android:clickable="true">
+        android:layout_gravity="start" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="150dp" />
-
-        <FrameLayout
-            android:id="@+id/weichatDir"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_button"
-            android:clickable="true">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:gravity="center"
-                android:background="@color/transparent"
-                android:drawableLeft="@drawable/ic_weixin"
-                android:drawablePadding="10dp"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:text="微信目录" />
-        </FrameLayout>
-
-    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
+
+

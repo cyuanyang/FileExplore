@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <LinearLayout
+        android:id="@+id/sortLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_button"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:tag="100">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:background="@color/transparent"
+            android:drawableLeft="@drawable/ic_sort"
+            android:drawablePadding="10dp"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:text="排序" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/hideFileLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_button"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:tag="101">
+
+        <TextView
+            android:id="@+id/hideFileTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:background="@color/transparent"
+            android:drawableLeft="@drawable/ic_eye"
+            android:drawablePadding="10dp"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:text="显示隐藏文件" />
+    </LinearLayout>
+
+</merge>

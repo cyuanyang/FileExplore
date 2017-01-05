@@ -26,9 +26,9 @@ public class FileManager {
     private File currentDir; ///当前所在目录
 
     private Copy copy;
-    private int sortType = SortFile.SORT_BY_NAME; ///排序的方式
-
     private DirectoryStack<DirectorInfo<FileModel>> stack = new DirectoryStack<DirectorInfo<FileModel>>(); //目录栈
+    private boolean hideFileIsShow = false; //隐藏文件是否显示
+    private int sortType  = SortFile.SORT_BY_NAME;//文件排序类型
 
     public FileManager(Context c){
         this.context = c;
@@ -42,6 +42,11 @@ public class FileManager {
         if (files!=null){
             for (File file : files) {
                 FileModel mo = new FileModel();
+                if (!hideFileIsShow){
+                    if (file.getName().startsWith(".")){
+                        continue;
+                    }
+                }
                 mo.name = file.getName();
                 mo.isDir = file.isDirectory();
                 mo.file = file;
@@ -49,7 +54,7 @@ public class FileManager {
             }
         }
 
-        this.sortFileModel(result);
+        this.sortFileModel(result , sortType);
 
         return result;
     }
@@ -73,6 +78,11 @@ public class FileManager {
         if (files!=null){
             for (File file : files) {
                 FileModel mo = new FileModel();
+                if (!hideFileIsShow){
+                    if (file.getName().startsWith(".")){
+                        continue;
+                    }
+                }
                 mo.name = file.getName();
                 mo.isDir = file.isDirectory();
                 mo.file = file;
@@ -80,9 +90,9 @@ public class FileManager {
             }
         }
 
-        this.sortFileModel(result );
+        this.sortFileModel(result , sortType);
 
-        stack.push(new DirectorInfo<FileModel>(currentDir.getAbsolutePath() , result));
+        stack.push(new DirectorInfo<FileModel>(currentDir.getAbsolutePath() , result , this.hideFileIsShow));
         return result;
     }
     ///返某一个到文件夹
@@ -91,7 +101,12 @@ public class FileManager {
         if (currentDir!=null){
             stack.pop();
             DirectorInfo<FileModel> directorInfo = stack.getFirst();
-            return directorInfo.files;
+            if (directorInfo.isShowHideFile != this.hideFileIsShow){
+                ///需要更新数据
+                return refreshCurrentDirectoryInfo();
+            }else {
+                return directorInfo.files;
+            }
         }
         return Collections.emptyList();
     }
@@ -122,10 +137,20 @@ public class FileManager {
         new Delete(fileModels , callback).delete();
     }
 
-
     ///对文件进行排序
-    public List<FileModel> sortFileModel(List<FileModel> fileModels){
-       return SortFile.sort(fileModels , this.sortType);
+    public List<FileModel> sortFileModel(List<FileModel> fileModels , int sortType){
+        this.sortType = sortType;
+        return SortFile.sort(fileModels , sortType);
+    }
+
+    ///返回当前文件排序类型
+    public int getSortType(){
+        return this.sortType;
+    }
+
+    ///是否显示隐藏文件
+    public void isShowHideFile(boolean isShow){
+        this.hideFileIsShow = isShow;
     }
 
     ///返回当前的所在的文件夹

@@ -11,12 +11,14 @@ public class DirectorInfo<T> {
 
     public String dir; ///当前目录
     public List<T> files;///当前目录的所有文件
+    public boolean isShowHideFile; //是否显示了隐藏文件
 
     private State state;
 
-    public DirectorInfo(String dir , List<T> files){
+    public DirectorInfo(String dir , List<T> files  , boolean isShowHideFile){
         this.dir = dir;
         this.files = files;
+        this.isShowHideFile = isShowHideFile;
     }
 
     public void setState(State state){
