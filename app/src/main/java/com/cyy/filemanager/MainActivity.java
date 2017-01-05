@@ -371,8 +371,11 @@ public class MainActivity extends AppCompatActivity implements
     /********* 菜单排序事件 *************/
     @Override
     public void sortByName() {
-        Log.e("vv" , "ddd");
-//        fileManager.sortFileModel()
+        if (fileManager.getSortType()!=SortFile.SORT_BY_NAME){
+            fileManager.sortFileModel(datas , SortFile.SORT_BY_NAME);
+            adapter.notifyDataSetChanged();
+        }
+        drawerLayout.closeDrawers();
     }
 
     @Override
@@ -382,8 +385,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void sortByType() {
-        fileManager.sortFileModel(datas , SortFile.SORT_BY_TYPE);
-        adapter.notifyDataSetChanged();
+        if (fileManager.getSortType()!=SortFile.SORT_BY_TYPE){
+            fileManager.sortFileModel(datas , SortFile.SORT_BY_TYPE);
+            adapter.notifyDataSetChanged();
+        }
+        drawerLayout.closeDrawers();
     }
 
 }

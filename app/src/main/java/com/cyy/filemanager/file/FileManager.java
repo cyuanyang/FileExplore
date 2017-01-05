@@ -92,7 +92,7 @@ public class FileManager {
 
         this.sortFileModel(result , sortType);
 
-        stack.push(new DirectorInfo<FileModel>(currentDir.getAbsolutePath() , result));
+        stack.push(new DirectorInfo<FileModel>(currentDir.getAbsolutePath() , result , this.hideFileIsShow));
         return result;
     }
     ///返某一个到文件夹
@@ -101,7 +101,12 @@ public class FileManager {
         if (currentDir!=null){
             stack.pop();
             DirectorInfo<FileModel> directorInfo = stack.getFirst();
-            return directorInfo.files;
+            if (directorInfo.isShowHideFile != this.hideFileIsShow){
+                ///需要更新数据
+                return refreshCurrentDirectoryInfo();
+            }else {
+                return directorInfo.files;
+            }
         }
         return Collections.emptyList();
     }
