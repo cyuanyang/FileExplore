@@ -1,6 +1,7 @@
 package com.cyy.filemanager;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,7 +22,10 @@ import com.cyy.filemanager.file.Copy;
 import com.cyy.filemanager.file.Delete;
 import com.cyy.filemanager.file.FileManager;
 import com.cyy.filemanager.file.FileModel;
+import com.cyy.filemanager.file.FileType;
+import com.cyy.filemanager.file.SortFile;
 import com.cyy.filemanager.file.dir.DirectorInfo;
+import com.cyy.filemanager.tools.Persistence;
 import com.cyy.filemanager.views.MyFloatingActionsMenu;
 import com.cyy.filemanager.views.bar.BarLayout;
 import com.cyy.filemanager.views.dialog.AlertDialog;
@@ -89,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void init() {
-        initView();
         fileManager = new FileManager(this);
+        initView();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycleView.setLayoutManager(linearLayoutManager);
 
@@ -129,7 +133,8 @@ public class MainActivity extends AppCompatActivity implements
         menuLayout = (MenuLayout) findViewById(R.id.menu_layout);
         menuLayout.setMenuCallback(this);
         menuLayout.setMenuSortCallback(this);
-
+        menuLayout.setShowHideFile(Persistence.getBoolean(Persistence.kHideFile , false));
+        fileManager.isShowHideFile(Persistence.getBoolean(Persistence.kHideFile , false));
     }
 
     @Override
@@ -355,7 +360,12 @@ public class MainActivity extends AppCompatActivity implements
     /********* 菜单事件 *************/
     @Override
     public void onMenuChangeHideFileState(boolean isShow) {
-        
+        Log.d("main>>" , "show hide file ＝ "+ isShow);
+        fileManager.isShowHideFile(isShow);
+        Persistence.insertBoolean(Persistence.kHideFile , isShow);
+        ///刷刷新目录
+        refreshFileByDir(fileManager.refreshCurrentDirectoryInfo());
+        drawerLayout.closeDrawers();
     }
 
     /********* 菜单排序事件 *************/
@@ -372,7 +382,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void sortByType() {
-
+        fileManager.sortFileModel(datas , SortFile.SORT_BY_TYPE);
+        adapter.notifyDataSetChanged();
     }
 
 }
